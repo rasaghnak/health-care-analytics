@@ -1,4 +1,61 @@
-Health care Analytics
+# Healthcare Data Analytics Project
+
+## Project Overview
+
+This project simulates a healthcare data environment by generating synthetic practitioner and patient encounter data. The goal is to build a reproducible pipeline for healthcare data analysis using modern data tools, and to perform advanced SQL-based analytics to gain insights that would typically support healthcare operations, quality improvement, and clinical reporting.
+
+## Data Sources
+
+The dataset is generated using Python, Faker, and NumPy, I took insipiration from CMS dataset. It simulates:
+
+ Patient demographics (age, gender)
+ Encounter data (encounter type, health procedures, total visits)
+ Practitioner information (department, license, NPI number, clinic details)
+ Practitioner employment data (status, employment start date)
+
+Approximately 100,000 rows were generated and loaded into an SQLite database.
+
+## Tools Used
+
+ SQLite: Lightweight, file-based relational database for initial storage and querying.
+ DBeaver: SQL client used for data exploration and query development.
+ Python (Pandas, Faker): Data generation and loading into SQLite.
+ Tableau: Visualization and dashboarding to communicate insights.
+ SQL: Advanced querying including Window Functions and Common Table Expressions (CTEs).
+
+## Database Schema
+
+Currently, the project uses a single denormalized table called `practitioner_encounters`. In future iterations, this will be normalized into:
+
+practitioner
+patient
+encounter
+
+## Key Analysis Performed
+
+### Exploratory Data Analysis
+
+ Patient visit frequency distribution
+ Practitioner workload (unique patient count per practitioner)
+ Encounter trends by department
+ Average patient age by encounter type
+ Identification of inactive practitioners with active encounters (data quality check)
+
+
+## Tableau Dashboards
+
+Several dashboards were built in Tableau using an exported version of the dataset:
+
+ Practitioner Workload by Department
+ Patient Visit Frequency Histogram
+ Encounter Volume Over Time
+ Active vs Inactive Practitioner Engagement
+
+
+
+
+
+
 
 
 
