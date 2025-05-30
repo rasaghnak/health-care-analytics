@@ -1,10 +1,10 @@
-#Healthcare Data Analytics Project
+Healthcare Data Analytics Project
 
-## Project Overview
+Project Overview
 
 This project simulates a healthcare data environment by generating synthetic practitioner and patient encounter data. The goal is to build a reproducible pipeline for healthcare data analysis using modern data tools, and to perform advanced SQL-based analytics to gain insights that would typically support healthcare operations, quality improvement, and clinical reporting.
 
-## Data Sources
+Data Sources
 
 The dataset is generated using Python, Faker, and NumPy, I took insipiration from CMS dataset. It simulates:
 
@@ -15,7 +15,7 @@ The dataset is generated using Python, Faker, and NumPy, I took insipiration fro
 
 Approximately 100,000 rows were generated and loaded into an SQLite database.
 
-## Tools Used
+Tools Used
 
  SQLite: Lightweight, file-based relational database for initial storage and querying.
  DBeaver: SQL client used for data exploration and query development.
@@ -23,7 +23,7 @@ Approximately 100,000 rows were generated and loaded into an SQLite database.
  Tableau: Visualization and dashboarding to communicate insights.
  SQL: Advanced querying including Window Functions and Common Table Expressions (CTEs).
 
-## Database Schema
+Database Schema
 
 Currently, the project uses a single denormalized table called `practitioner_encounters`. In future iterations, this will be normalized into:
 
@@ -31,9 +31,9 @@ practitioner
 patient
 encounter
 
-## Key Analysis Performed
+Key Analysis Performed
 
-### Exploratory Data Analysis
+Exploratory Data Analysis
 
  Patient visit frequency distribution
  Practitioner workload (unique patient count per practitioner)
@@ -42,7 +42,7 @@ encounter
  Identification of inactive practitioners with active encounters (data quality check)
 
 
-## Tableau Dashboards
+Tableau Dashboards
 
 Several dashboards were built in Tableau using an exported version of the dataset:
 
