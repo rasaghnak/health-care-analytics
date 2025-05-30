@@ -6,125 +6,53 @@ This project simulates a healthcare data environment by generating synthetic pra
 
 ## Data Sources
 
-The dataset is generated using Python, Faker, and NumPy. It simulates:
+The dataset is generated using Python, Faker, and NumPy, I took insipiration from CMS dataset. It simulates:
 
-* Patient demographics (age, gender)
-* Encounter data (encounter type, health procedures, total visits)
-* Practitioner information (department, license, NPI number, clinic details)
-* Practitioner employment data (status, employment start date)
+ Patient demographics (age, gender)
+ Encounter data (encounter type, health procedures, total visits)
+ Practitioner information (department, license, NPI number, clinic details)
+ Practitioner employment data (status, employment start date)
 
 Approximately 100,000 rows were generated and loaded into an SQLite database.
 
 ## Tools Used
 
-* SQLite: Lightweight, file-based relational database for initial storage and querying.
-* DBeaver: SQL client used for data exploration and query development.
-* Python (Pandas, Faker): Data generation and loading into SQLite.
-* Tableau: Visualization and dashboarding to communicate insights.
-* SQL: Advanced querying including Window Functions and Common Table Expressions (CTEs).
+ SQLite: Lightweight, file-based relational database for initial storage and querying.
+ DBeaver: SQL client used for data exploration and query development.
+ Python (Pandas, Faker): Data generation and loading into SQLite.
+ Tableau: Visualization and dashboarding to communicate insights.
+ SQL: Advanced querying including Window Functions and Common Table Expressions (CTEs).
 
 ## Database Schema
 
 Currently, the project uses a single denormalized table called `practitioner_encounters`. In future iterations, this will be normalized into:
 
-* practitioner
-* patient
-* encounter
+practitioner
+patient
+encounter
 
 ## Key Analysis Performed
 
 ### Exploratory Data Analysis
 
-* Patient visit frequency distribution
-* Practitioner workload (unique patient count per practitioner)
-* Encounter trends by department
-* Average patient age by encounter type
-* Identification of inactive practitioners with active encounters (data quality check)
+ Patient visit frequency distribution
+ Practitioner workload (unique patient count per practitioner)
+ Encounter trends by department
+ Average patient age by encounter type
+ Identification of inactive practitioners with active encounters (data quality check)
 
-### Example SQL Queries
-
-#### Patient Visit Frequency
-
-```sql
-SELECT patient_id, COUNT(*) AS visit_count
-FROM practitioner_encounters
-GROUP BY patient_id
-HAVING visit_count > 5
-ORDER BY visit_count DESC;
-```
-
-#### Average Patient Age by Encounter Type
-
-```sql
-SELECT encounter_type, AVG(patient_age) AS avg_age
-FROM practitioner_encounters
-GROUP BY encounter_type;
-```
-
-#### Practitioner Panel Size Using Window Function
-
-```sql
-SELECT DISTINCT
-    practitioner_id,
-    practitioner_first_name,
-    practitioner_last_name,
-    COUNT(DISTINCT patient_id) OVER (PARTITION BY practitioner_id) AS panel_size
-FROM practitioner_encounters;
-```
-
-#### Monthly Encounter Volume Using CTE and Window Function
-
-```sql
-WITH monthly_encounters AS (
-    SELECT
-        STRFTIME('%Y-%m', employment_start_date) AS encounter_month,
-        COUNT(*) AS total_encounters
-    FROM practitioner_encounters
-    GROUP BY encounter_month
-)
-SELECT *,
-    SUM(total_encounters) OVER (ORDER BY encounter_month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total
-FROM monthly_encounters;
-```
-
-#### Practitioners with No Recent Encounters (Last 1 Year Example CTE)
-
-```sql
-WITH recent_encounters AS (
-    SELECT practitioner_id, MAX(employment_start_date) AS last_encounter_date
-    FROM practitioner_encounters
-    GROUP BY practitioner_id
-)
-SELECT p.practitioner_id, p.practitioner_first_name, p.practitioner_last_name, r.last_encounter_date
-FROM recent_encounters r
-JOIN practitioner_encounters p ON p.practitioner_id = r.practitioner_id
-WHERE r.last_encounter_date < DATE('now', '-1 year');
-```
 
 ## Tableau Dashboards
 
 Several dashboards were built in Tableau using an exported version of the dataset:
 
-* Practitioner Workload by Department
-* Patient Visit Frequency Histogram
-* Encounter Volume Over Time
-* Active vs Inactive Practitioner Engagement
+ Practitioner Workload by Department
+ Patient Visit Frequency Histogram
+ Encounter Volume Over Time
+ Active vs Inactive Practitioner Engagement
 
-These dashboards were used to visually communicate findings to stakeholders.
 
-## Learnings and Next Steps
 
-* Window functions and CTEs allow for very powerful summarization and running totals, essential in time-based healthcare analysis.
-* SQLite is perfectly suitable for prototyping but would need to be replaced by PostgreSQL or another production RDBMS for scalability.
-* Data normalization will enable more flexible queries and a more maintainable data model.
-* The pipeline can be extended with dbt for version-controlled SQL and Airflow for orchestration.
-
-## Possible Enhancements
-
-* Normalize schema into separate patient, practitioner, and encounter tables
-* Implement data versioning and pipeline orchestration
-* Add automated data quality checks
-* Implement advanced analytics such as risk scoring or cohort analysis
 
 
 
